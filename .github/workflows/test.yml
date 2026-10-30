@@ -10,7 +10,7 @@ on:
 
 jobs:
   ruff:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository == 'foxion37/spec-kit' && github.ref == 'refs/heads/main' && contains(fromJSON('["push","workflow_dispatch","schedule"]'), github.event_name) && 'mac-mini-linux-arm64' || 'ubuntu-latest' }}
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -27,7 +27,7 @@ jobs:
         run: uvx ruff check src/
 
   pytest:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ github.repository == 'foxion37/spec-kit' && github.ref == 'refs/heads/main' && contains(fromJSON('["push","workflow_dispatch","schedule"]'), github.event_name) && matrix.os == 'ubuntu-latest' && 'mac-mini-linux-arm64' || matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
